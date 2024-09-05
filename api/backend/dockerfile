@@ -1,0 +1,17 @@
+# Use an official OpenJDK runtime as a parent image
+FROM openjdk:17
+
+# Set the working directory
+WORKDIR /app
+
+# Add the application's JAR file to the container
+COPY PropertyManagement/target/PropertyManagement-0.0.1-SNAPSHOT.jar /app/app.jar
+COPY idea_rt.jar /app/idea_rt.jar
+# Expose port 8080
+EXPOSE 8080
+
+# Run the jar file
+#CMD ["java","-Dspring.profiles.active=default", "-Dlogging.level.root=DEBUG", "-jar", "/app/app.jar"]
+CMD ["java", "-XX:TieredStopAtLevel=1", "-Dspring.output.ansi.enabled=always", "-Dspring.jmx.enabled=true", "-Dspring.application.admin.enabled=true", "-Dmanagement.endpoints.jmx.exposure.include=*", "-Dcom.sun.management.jmxremote ","-javaagent:/app/idea_rt.jar=37965:/app", "-Dfile.encoding=UTF-8", "-jar", "/app/app.jar"]
+
+#/home/mehdi/.jdks/corretto-17.0.11/bin/java -XX:TieredStopAtLevel=1 -Dspring.output.ansi.enabled=always -Dcom.sun.management.jmxremote -Dspring.jmx.enabled=true -Dspring.liveBeansView.mbeanDomain -Dspring.application.admin.enabled=true -Dmanagement.endpoints.jmx.exposure.include=* -javaagent:/home/mehdi/.intellij/lib/idea_rt.jar=37965:/home/mehdi/.intellij/bin -Dfile.encoding=UTF-8 

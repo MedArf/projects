@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: property_management
+      POSTGRES_USER: postgres 
+      POSTGRES_PASSWORD: cor6G0NUJhUm6WNAUBQA$8&tt_ 
+    ports:
+      - "5432:5432"
+    volumes:
+      - /var/lib/postgresql/14/main/:/var/lib/postgresql/data
+      - /home/mehdi/Projects/property_management_app/dev/db_conf/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
+      - /home/mehdi/Projects/property_management_app/dev/db_conf/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
+      - /home/mehdi/Projects/property_management_app/dev/db_conf/pg_ident.conf:/var/lib/postgresql/data/pg_ident.conf
+      - /etc/postgresql/14/main/conf.d:/var/lib/postgresql/data/conf.d
+      - /var/run/postgresql/:/var/run/postgresql/
+  backend:
+    build:
+      context: ./backend
+      dockerfile: dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend/nextjs-dashboard
+      dockerfile: dockerfile
+    ports:
+      - "3000:3000"
+volumes:
+  postgres_data:
+
+
